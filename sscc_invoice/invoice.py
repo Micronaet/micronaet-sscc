@@ -90,6 +90,8 @@ class SsccInvoiceLine  (orm.Model):
         # TODO 1st char??    
         }
         
+
+        
         
 
         

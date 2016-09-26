@@ -103,8 +103,11 @@
             <field name="name">sscc.invoice.line.tree</field>
             <field name="model">sscc.invoice.line</field>
             <field name="arch" type="xml">
-                <tree string="SSCC Invoice Line" >        
-                    <field name="name" />
+                <tree string="SSCC Invoice Line">        
+                </tree>
+            </field>
+        </record>
+                    
         <record model="ir.ui.view" id="view_sscc_invoice_line_form">
             <field name="name">sscc.invoice.line.form</field>
             <field name="model">sscc.invoice.line</field>
@@ -117,6 +120,31 @@
                    </sheet>     
                 </form>
             </field>
+        </record>
+        <record model="ir.ui.view" id="view_sscc_invoice_line_search">
+            <field name="name">sscc.invoice.line.search</field>
+            <field name="model">sscc.invoice.line</field>
+            <field name="arch" type="xml">
+                <search string="SSCC Invoice Line" version="7.0">        
+                    <field name="name" />
+                    <!--<field name="partner_id" filter_domain="[('partner_id','=',self)]"/>
+                    <filter name="state_draft" string="Draft state" domain="[('state','=','draft')]"/>
+                    <group expand="0" string="Group By...">
+                        <filter name="group_partner" string="Partner" context="{'group_by': 'partner_id'}"/>
+                        <filter string="Status" context="{'group_by': 'state'}" />
+                    </group>-->
+                </search>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_sscc_invoice_line">
+            <field name="name">SSCC Invoice Line</field>
+            <field name="res_model">sscc.invoice.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_sscc_invoice_line_tree"/>
+            <field name="search_view_id" ref="view_sscc_invoice_line_search"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
         </record>
                     
                       
@@ -138,6 +166,12 @@
                 id="menu_sscc_code_management_invoice" 
                 action="action_sscc_invoice"
                 sequence="20"                
+                />
+            <menuitem 
+                parent="menu_sscc_code_management_root" 
+                id="menu_sscc_code_management_invoice_line" 
+                action="action_sscc_invoice_line"
+                sequence="25"                
                 />
             
             
