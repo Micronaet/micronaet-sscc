@@ -48,10 +48,49 @@ class SsccCode(orm.Model):
     _columns = {
         'name': fields.char(
             'Counter', size=64, required=True,
+              
             ),
         # Function complete code
         # TODO 1st char??    
         }
+
+class SsccInvoice  (orm.Model):
+    """ Model name: SsccInvoice
+    """
+    
+    _name = 'sscc.invoice'
+    _description = 'SSCC Invoice'
+    
+    _columns = {
+        'name': fields.char('Number', size=15, required=True),
+        'date': fields.date('Date'),
+        'year': fields.char('Year', size=4),
+        'journal': fields.char('Journal', size=64, required=False, 
+            readonly=False),   
+        'partner_id': fields.many2one(
+            'res.partner', 'Partner'), 
+        # Function complete code
+        # TODO 1st char??    
+        }
+        
+class SsccInvoiceLine  (orm.Model):
+    """ Model name: SsccInvoiceLine
+    """
+    
+    _name = 'sscc.invoice.line'
+    _description = 'SSCC Invoice Line'
+    
+    _columns = {
+        'name': fields.char('Description', size=64),
+        'code': fields.char('Code', size=20),
+        'uom': fields.char('UOM', size=2), 
+        'quantity': fields.float('Quantity', digits=(16, 2)), 
+        'invoice_id': fields.many2one('sscc.invoice', 'Invoice'), 
+        # Function complete code
+        # TODO 1st char??    
+        }
+        
+        
 
         
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
