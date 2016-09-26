@@ -53,7 +53,7 @@
         
         <menuitem
             parent="base.menu_base_partner" 
-            string="SSCC Management" 
+            name="SSCC Management" 
             id="menu_sscc_code_management_root" 
             sequence="15"
             />
