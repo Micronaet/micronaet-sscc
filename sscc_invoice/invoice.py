@@ -90,6 +90,18 @@ class SsccInvoiceLine  (orm.Model):
         # TODO 1st char??    
         }
         
+class SsccInvoice  (orm.Model):
+    """ Model name: SsccInvoice
+    """
+    
+    _inherit = 'sscc.invoice'
+
+    
+    _columns = {
+        'line_ids': fields.one2many(
+            'sscc.invoice.line', 'invoice_id', 
+            'Line'), 
+        }
 
         
         
