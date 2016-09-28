@@ -65,6 +65,7 @@ class SsccCode(orm.Model):
         # Function complete code
         # TODO 1st char??    
         }
+        
     _defaults = {
         'code_type': lambda *x: '3',
     
