@@ -40,19 +40,35 @@ _logger = logging.getLogger(__name__)
 
 class SsccCode(orm.Model):
     """ Model name: SsccCode
-    """
-    
+    """    
     _name = 'sscc.code'
     _description = 'SSCC Code'
     
+    def _get_sscc_code(self, cr, uid, ids, fields, args, context=None):
+        ''' Fields function for calculate 
+        '''
+        res = {}
+        for item in self.browse(cr, uid, ids, context=context):
+            res[item.id] = '%s%s' % (item.code_type, item.name)
+        return res
+        
     _columns = {
-        'name': fields.char(
-            'Counter', size=64, required=True,
-              
-            ),
+        'name': fields.char('Counter', size=64, required=True),  
+        'code_type': fields.selection([
+            ('0', '0'), ('1', '1'), ('2', '2'), ('3', '3'),
+            ('4', '4'), ('5', '5'), ('6', '6'), ('7', '7'),
+            ('8', '8'), ('9', '9'),
+            ], 'Code Type'),
+        'code': fields.function(_get_sscc_code, method=True, 
+            type='string', string='SSCC Code', store=False), 
+            
         # Function complete code
         # TODO 1st char??    
         }
+    _defaults = {
+        'code_type': lambda *x: '3',
+    
+        }    
 
 class SsccInvoice  (orm.Model):
     """ Model name: SsccInvoice
@@ -65,14 +81,16 @@ class SsccInvoice  (orm.Model):
     def import_invoice_csv(self, cr, uid, ids, context=None):
         ''' Import csv file
         '''
+        import pdb; pdb.set_trace()
         # Pool used:
         line_pool = self.pool.get('sscc.invoice.line')
         
         # Initial setup_
-        filename = '/home/thebrush/etl/fattura.csv' # TODO
+        filename = '/home/thebrush/etl/MCS/fattura.csv' # TODO
         
         header = True
         invoice_id = False
+        _logger.info('Import invoice %s' % filename)
         for line in open(filename, 'r'):
             # -----------------------------------------------------------------     
             # Header data:            
@@ -83,14 +101,14 @@ class SsccInvoice  (orm.Model):
                 # Fields:
                 number_invoice = line[0:6] # 6
                 date_invoice = line[6:16] # 10
-                partner_code = '' # TODO
+                partner_code = line[284:293] # 9 (end file)
                 
                 # Calculated fields:
                 partner_id = False # TODO
                
                 # TODO check number invoice first
                 
-                # Create header
+                # Create invoice header
                 invoice_id = self.create(cr, uid, {
                     'name': number_invoice,
                     'date': date_invoice,
@@ -106,40 +124,59 @@ class SsccInvoice  (orm.Model):
             order_number = line[16:22] # 6
             order_date = line[22:32] # 10
             code = line[32:48] # 16
-            description = line[1:72]
-            uom = line[]
-            currency = line[]            
-            price = line[1:10] # 10
-            duty_code = line[] # 8
-            #sscc = line[] # 18
-            quantity = line[]
-            q_x_pack = line[]
-            parcel = line[]
-            net_weight = line[]
-            weight = line[]
-            lot = line[]
-            deadline = line[]
-            country_origin = line[]
-            country_from = line[] # Italy
-            #duty_ok = line[]
-            #mnr_number = line[]
-            #sanitary = line[]
-            #sanitary_date = line[]
-            #extra_code = line[]
-            #sif = line[]
+            description = line[48:120] # 72
+            uom = line[120:122] # 2
+            currency = line[122:124] # 2         
+            price = line[124:134] # 10
+            duty_code = line[134:142] # 8
+            #sscc = line[142:160] # 18
+            trade_number = line[160:170] # 10
+            quantity = line[170:182] # 12
+            q_x_pack = line[182:191] # 9
+            parcel = line[191:196] # 5
+            net_weight = line[196:209] # 13
+            weight = line[209:223] # 14
+            lot = line[223:228] # 5
+            deadline = line[228:233] # 5
+            country_origin = line[233:235] # 2
+            country_from = line[235:237] # 2
+            #duty_ok = line[237:239] # 2
+            #mnr_number = line[239:244] # 5 
+            #sanitary = line[244:254] # 10
+            #sanitary_date = line[254:264] # 10
+            #extra_code = line[264:274] # 10
+            #sif = line[274:284] # 10            
             
+            # Create invoice line 
             line_pool.create(cr, uid, {
                 'invoice_id': invoice_id,
                 'name': description,
                 'code': code,
                 'uom': uom,
+                'currency': currency,
+                'price': price, 
                 'quantity': quantity,
                 'order_date': order_date,
-                'order_number': order_number,                 
-                 
-                 }, context=context)
+                'order_number': order_number,
+                'duty_code': duty_code,
+                'q_x_pack': q_x_pack,
+                'quantity': quantity,
+                'parcel': parcel,
+                'net_weight': net_weight,
+                'weight': weight,
+                'lot': lot,
+                'deadline': deadline,
+                'country_origin': country_origin,
+                'country_from': country_from,                 
+                #'duty_ok'
+                #'mnr_number'
+                #'sanitary'
+                #'sanitary_date'
+                #'extra_code'
+                #'sif' 
+                }, context=context)
                
-        return True
+        return True # TODO return view with invoice!
         
     _columns = {
         'name': fields.char('Number', size=15, required=True),
@@ -162,15 +199,30 @@ class SsccInvoiceLine  (orm.Model):
         'name': fields.char('Description', size=64),
         'code': fields.char('Code', size=20),
         'uom': fields.char('UOM', size=2), 
-        'quantity': fields.float('Quantity', digits=(16, 2)), 
+        'price': fields.char('Price', size=12), 
+        'currency': fields.char('currency', size=12), 
         'invoice_id': fields.many2one('sscc.invoice', 'Invoice'), 
+        'sscc_id': fields.many2one('sscc.code', 'SSCC code'),
         'order_date': fields.date('Order date'),
         'order_number': fields.char('Order number', size=15), 
-        'sscc_id': fields.many2one('sscc.code', 'SSCC code'), 
-        
-        
-        # Function complete code
-        # TODO 1st char??    
+        'duty_code': fields.char('Duty code', size=8),
+        #'sscc': fields.char('SSCC', size=18),
+        'trade_number': fields.char('Trade number', size=10),
+        'quantity': fields.char('Quantity', size=12),
+        'q_x_pack': fields.char('Q_x_pack', size=9),
+        'parcel': fields.char('Parcel', size=5),
+        'net_weight': fields.char('Net_weight', size=13),
+        'weight': fields.char('Weight', size=14),
+        'lot': fields.char('Lot', size=10), #TODO
+        'deadline': fields.char('Deadline', size=10),#TODO
+        'country_origin': fields.char('Country origin', size=10),#TODO
+        'country_from': fields.char('Country from', size=10), #TODO
+        'duty_ok': fields.boolean('Duty ok?'),
+        'mnr_number': fields.char('Mnr Number', size=10), #TODO
+        'sanitary': fields.char('Sanitary', size=10), #TODO
+        'sanitary_date': fields.char('Sanitary date', size=10), #TODO
+        'extra_code': fields.char('Extra code', size=10), #TODO
+        'sif': fields.char('Sif', size=10), #TODO
         }
         
 class SsccInvoice  (orm.Model):

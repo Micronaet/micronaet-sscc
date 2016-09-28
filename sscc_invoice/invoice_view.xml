@@ -8,6 +8,8 @@
             <field name="arch" type="xml">
                 <tree string="SSCC Code" >        
                     <field name="name" />
+                    <field name="code_type"/>
+                    <field name="code"/>
                 </tree>
             </field>
         </record>
@@ -19,6 +21,8 @@
                    <sheet>
                        <group colspan="4" col="4">
                            <field name="name" />
+                           <field name="code_type"/>
+                           <field name="code"/>
                        </group>     
                    </sheet>     
                 </form>
@@ -67,6 +71,13 @@
                    <sheet>
                        <group colspan="4" col="4">
                            <field name="name" />
+                           <field name="date"/>
+                           <field name="year"/>
+                           <field name="journal"/>
+                           <field name="partner_id"/>
+                           <button name="import_invoice_csv" string="Import" type="object" />
+                           <separator name="Line Ids" colspan="4"/>
+                           <field name="line_ids" colspan="4" col="4" nolabel="1"/>
                        </group>     
                    </sheet>     
                 </form>
@@ -104,6 +115,7 @@
             <field name="model">sscc.invoice.line</field>
             <field name="arch" type="xml">
                 <tree string="SSCC Invoice Line">        
+                   <field name="name"/>
                 </tree>
             </field>
         </record>
@@ -116,6 +128,31 @@
                    <sheet>
                        <group colspan="4" col="4">
                            <field name="name" />
+                           <field name="code"/>
+                           <field name="uom"/>            
+                           <field name="price"/>
+                           <field name="currency"/>
+                           <field name="invoice_id"/>
+                           <field name="sscc_id"/>
+                           <field name="order_date"/>
+                           <field name="order_number"/>
+                           <field name="duty_code"/>
+                           <field name="trade_number"/>
+                           <field name="quantity"/>              
+                           <field name="q_x_pack"/>
+                           <field name="parcel"/>
+                           <field name="net_weight"/>
+                           <field name="weight"/>
+                           <field name="lot"/>
+                           <field name="deadline"/>
+                           <field name="country_origin"/>
+                           <field name="country_from"/>
+                           <field name="duty_ok"/>
+                           <field name="mnr_number"/>
+                           <field name="sanitary"/>
+                           <field name="sanitary_date"/>
+                           <field name="extra_code"/>
+                           <field name="sif"/> 
                        </group>     
                    </sheet>     
                 </form>
