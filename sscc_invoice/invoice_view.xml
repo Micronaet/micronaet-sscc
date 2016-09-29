@@ -63,6 +63,7 @@
                          <field name="year"/>
                          <field name="journal"/>
                          <field name="partner_id"/>
+                         <field name="partner_code"/>
                </tree>
            </field>
         </record>
@@ -78,6 +79,7 @@
                            <field name="year"/>
                            <field name="journal"/>
                            <field name="partner_id"/>
+                           <field name="partner_code"/>
                            <button name="generate_add_new_SSCC_code" string="Add new SSCC code" type="object" />
                            <notebook colspan="4">
                                <page string="Line">

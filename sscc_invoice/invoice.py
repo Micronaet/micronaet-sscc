@@ -78,8 +78,7 @@ class SsccCode(orm.Model):
 
 class SsccInvoice  (orm.Model):
     """ Model name: SsccInvoice
-    """
-    
+    """    
     _name = 'sscc.invoice'
     _description = 'SSCC Invoice'
              
@@ -90,25 +89,25 @@ class SsccInvoice  (orm.Model):
         code_pool= self.pool.get('sscc.code')
         invoice_proxy = self.browse(cr, uid, ids, context=context)[0]
         codes = len(invoice_proxy.code_ids)
-        code_id = code_pool.create(cr,uid, {'invoice_id': ids[0]}, context=context)
-        if codes : 
+        code_id = code_pool.create(cr,uid, {
+            'invoice_id': ids[0],
+            }, context=context)
+        if codes: 
             return True
         for line in invoice_proxy.line_ids:
-            line_pool.write(cr, uid, line.id, {'sscc_id': code_id}, context=context)
-        
-        
-         
-        
+            line_pool.write(cr, uid, line.id, {
+                'sscc_id': code_id,
+                }, context=context)
         return True
         
     # Import function:
     def import_invoice_csv(self, cr, uid, ids, context=None):
         ''' Import csv file
         '''
-        import pdb; pdb.set_trace()
         # Pool used:
         line_pool = self.pool.get('sscc.invoice.line')
         partner_pool = self.pool.get('res.partner')
+
         # Initial setup_
         filename = '/home/thebrush/etl/MCS/fattura.csv' # TODO
         
@@ -130,9 +129,11 @@ class SsccInvoice  (orm.Model):
                 # Calculated fields:
                 partner_id = False
                 if partner_code: 
-                    partner_ids = partner_pool.search(cr, uid, [('sql_customer_code', '=', partner_code)], context=context)
+                    partner_ids = partner_pool.search(cr, uid, [
+                        ('sql_customer_code', '=', partner_code),
+                        ], context=context)
                     if partner_ids:
-                        partner_id = partner_ids(0)
+                        partner_id = partner_ids[0]
                
                 # TODO check number invoice first
                 
@@ -142,6 +143,7 @@ class SsccInvoice  (orm.Model):
                     'date': date_invoice,
                     'year': date_invoice[:4],                    
                     'partner_id': partner_id,
+                    'partner_code': partner_code,
                     #'journal':
                     }, context=context)
                         
@@ -210,7 +212,8 @@ class SsccInvoice  (orm.Model):
         'name': fields.char('Number', size=15, required=True),
         'date': fields.date('Date'),
         'year': fields.char('Year', size=4),
-        'journal': fields.char('Journal', size=64),   
+        'journal': fields.char('Journal', size=64), 
+        'partner_code': fields.char('Partner code', size=9),
         'partner_id': fields.many2one('res.partner', 'Partner'),    
         'code_ids': fields.one2many(
             'sscc.code', 'invoice_id', 'Sscc Code'),
@@ -223,10 +226,10 @@ class SsccInvoice  (orm.Model):
                  
         # Function complete code
         # TODO 1st char??    
-        
     _defaults = {
         'state': lambda *x: 'draft',
         }
+        
 class SsccInvoiceLine  (orm.Model):
     """ Model name: SsccInvoiceLine
     """
@@ -272,7 +275,6 @@ class SsccInvoice  (orm.Model):
     
     _columns = {
         'line_ids': fields.one2many('sscc.invoice.line', 'invoice_id', 'Line'), 
-       
         }
         
 class SsccCode  (orm.Model):
@@ -282,11 +284,6 @@ class SsccCode  (orm.Model):
     _inherit = 'sscc.code'
     
     _columns = {
-        'line_ids': fields.one2many('sscc.invoice.line', 'sscc_id', 'Line'), 
-       
+        'line_ids': fields.one2many('sscc.invoice.line', 'sscc_id', 'Line'),        
         }
-        
-        
-
-        
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
