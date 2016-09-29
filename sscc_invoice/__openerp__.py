@@ -35,8 +35,9 @@
     'demo': [],
     'data': [
         'security/ir.model.access.csv', 
-        'invoice_view.xml',
+        'invoice_view.xml', 'counter.xml',
         ],
+        
     'active': False,
     'installable': True,
     'auto_install': False,

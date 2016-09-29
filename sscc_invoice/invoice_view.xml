@@ -6,13 +6,12 @@
             <field name="name">sscc.code.tree</field>
             <field name="model">sscc.code</field>
             <field name="arch" type="xml">
-                <tree string="SSCC Code" >        
+                <tree string="SSCC Code">
                     <field name="name" />
-                    <field name="code_type"/>
-                    <field name="code"/>
+                    <field name="invoice_id"/>
                 </tree>
             </field>
-        </record>
+        </record>        
         <record model="ir.ui.view" id="view_sscc_code_form">
             <field name="name">sscc.code.form</field>
             <field name="model">sscc.code</field>
@@ -21,8 +20,8 @@
                    <sheet>
                        <group colspan="4" col="4">
                            <field name="name" />
-                           <field name="code_type"/>
-                           <field name="code"/>
+                           <field name="invoice_id"/>
+                           <field name="line_ids"/>
                        </group>     
                    </sheet>     
                 </form>
@@ -59,7 +58,11 @@
            <field name="model">sscc.invoice</field>
            <field name="arch" type="xml">
                <tree string="SSCC Invoice" >        
-                   <field name="name" />
+                         <field name="name" />
+                         <field name="date"/>
+                         <field name="year"/>
+                         <field name="journal"/>
+                         <field name="partner_id"/>
                </tree>
            </field>
         </record>
@@ -75,9 +78,18 @@
                            <field name="year"/>
                            <field name="journal"/>
                            <field name="partner_id"/>
+                           <button name="generate_add_new_SSCC_code" string="Add new SSCC code" type="object" />
+                           <notebook colspan="4">
+                               <page string="Line">
+                                   <separator name="Line Ids" colspan="4"/>
+                                   <field name="line_ids" colspan="4" col="4" nolabel="1"/>
+                               </page>
+                               <page string="Sscc Code">
+                                   <field name="code_ids"/>                               
+                                   <field name="state"/>                                                              
+                               </page>
+                           </notebook>
                            <button name="import_invoice_csv" string="Import" type="object" />
-                           <separator name="Line Ids" colspan="4"/>
-                           <field name="line_ids" colspan="4" col="4" nolabel="1"/>
                        </group>     
                    </sheet>     
                 </form>
@@ -89,6 +101,7 @@
             <field name="arch" type="xml">
                 <search string="SSCC Invoice" version="7.0">        
                     <field name="name" />
+                    <field name="state"/>
                     <!--<field name="partner_id" filter_domain="[('partner_id','=',self)]"/>
                     <filter name="state_draft" string="Draft state" domain="[('state','=','draft')]"/>
                     <group expand="0" string="Group By...">
@@ -115,7 +128,17 @@
             <field name="model">sscc.invoice.line</field>
             <field name="arch" type="xml">
                 <tree string="SSCC Invoice Line">        
-                   <field name="name"/>
+                           <field name="name" />
+                           <field name="code"/>
+                           <field name="uom"/>            
+                           <field name="price"/>
+                           <field name="currency"/>
+                          <!--<field name="invoice_id"/>-->
+                           <field name="sscc_id"/>                         
+                           <field name="quantity"/>              
+                           <field name="lot"/>
+                          
+
                 </tree>
             </field>
         </record>
@@ -153,6 +176,7 @@
                            <field name="sanitary_date"/>
                            <field name="extra_code"/>
                            <field name="sif"/> 
+                           
                        </group>     
                    </sheet>     
                 </form>

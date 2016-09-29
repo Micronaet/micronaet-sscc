@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<openerp>
+    <data >
+	    <record model="ir.sequence.type" id="seq_sscc_counter">
+		    <field name="name">SSCC Code type</field>
+		    <field name="code">sscc.code.number</field>
+	    </record>
+	    <record model="ir.sequence" id="seq_sscc_counter_sequence">
+		    <field name="name">SSCC code</field>
+		    <field name="code">sscc.code.number</field>
+		    <field name="prefix">30000000</field>
+		    <field name="padding">9</field>
+	    </record>
+    </data>
+</openerp>

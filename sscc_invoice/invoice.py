@@ -53,22 +53,27 @@ class SsccCode(orm.Model):
         return res
         
     _columns = {
-        'name': fields.char('Counter', size=64, required=True),  
-        'code_type': fields.selection([
-            ('0', '0'), ('1', '1'), ('2', '2'), ('3', '3'),
-            ('4', '4'), ('5', '5'), ('6', '6'), ('7', '7'),
-            ('8', '8'), ('9', '9'),
-            ], 'Code Type'),
-        'code': fields.function(_get_sscc_code, method=True, 
-            type='string', string='SSCC Code', store=False), 
+        'name': fields.char('Counter', size=18, required=True),  
+        'create_date': fields.date('Create date', readonly=True),
+        'invoice_id': fields.many2one('sscc.invoice', 'Invoice'), 
+        
+        
+        #'code_type': fields.selection([
+        #    ('0', '0'), ('1', '1'), ('2', '2'), ('3', '3'),
+        #    ('4', '4'), ('5', '5'), ('6', '6'), ('7', '7'),
+        #    ('8', '8'), ('9', '9'),
+        #    ], 'Code Type'),
+        #'code': fields.function(_get_sscc_code, method=True, 
+        #    type='string', string='SSCC Code', store=False), 
             
         # Function complete code
         # TODO 1st char??    
         }
         
     _defaults = {
-        'code_type': lambda *x: '3',
-    
+        #'code_type': lambda *x: '3',
+        'name': lambda s, cr, uid, ctx: s.pool.get('ir.sequence').get(
+            cr, uid, 'sscc.code.number'),
         }    
 
 class SsccInvoice  (orm.Model):
@@ -77,7 +82,25 @@ class SsccInvoice  (orm.Model):
     
     _name = 'sscc.invoice'
     _description = 'SSCC Invoice'
-    
+             
+    def generate_add_new_SSCC_code (self, cr, uid, ids, context=None):
+        '''
+        '''
+        line_pool = self.pool.get('sscc.invoice.line')
+        code_pool= self.pool.get('sscc.code')
+        invoice_proxy = self.browse(cr, uid, ids, context=context)[0]
+        codes = len(invoice_proxy.code_ids)
+        code_id = code_pool.create(cr,uid, {'invoice_id': ids[0]}, context=context)
+        if codes : 
+            return True
+        for line in invoice_proxy.line_ids:
+            line_pool.write(cr, uid, line.id, {'sscc_id': code_id}, context=context)
+        
+        
+         
+        
+        return True
+        
     # Import function:
     def import_invoice_csv(self, cr, uid, ids, context=None):
         ''' Import csv file
@@ -85,7 +108,7 @@ class SsccInvoice  (orm.Model):
         import pdb; pdb.set_trace()
         # Pool used:
         line_pool = self.pool.get('sscc.invoice.line')
-        
+        partner_pool = self.pool.get('res.partner')
         # Initial setup_
         filename = '/home/thebrush/etl/MCS/fattura.csv' # TODO
         
@@ -102,10 +125,14 @@ class SsccInvoice  (orm.Model):
                 # Fields:
                 number_invoice = line[0:6] # 6
                 date_invoice = line[6:16] # 10
-                partner_code = line[284:293] # 9 (end file)
+                partner_code = line[284:293].strip() # 9 (end file)
                 
                 # Calculated fields:
-                partner_id = False # TODO
+                partner_id = False
+                if partner_code: 
+                    partner_ids = partner_pool.search(cr, uid, [('sql_customer_code', '=', partner_code)], context=context)
+                    if partner_ids:
+                        partner_id = partner_ids(0)
                
                 # TODO check number invoice first
                 
@@ -184,11 +211,22 @@ class SsccInvoice  (orm.Model):
         'date': fields.date('Date'),
         'year': fields.char('Year', size=4),
         'journal': fields.char('Journal', size=64),   
-        'partner_id': fields.many2one('res.partner', 'Partner'),         
+        'partner_id': fields.many2one('res.partner', 'Partner'),    
+        'code_ids': fields.one2many(
+            'sscc.code', 'invoice_id', 'Sscc Code'),
+        'state': fields.selection([
+            ('draft', 'Draft'),
+            ('assigned', 'Assigned'),
+            ('Closed', 'Closed'),
+            ], 'State', readonly=True),
+        }
+                 
         # Function complete code
         # TODO 1st char??    
-        }
         
+    _defaults = {
+        'state': lambda *x: 'draft',
+        }
 class SsccInvoiceLine  (orm.Model):
     """ Model name: SsccInvoiceLine
     """
@@ -223,7 +261,7 @@ class SsccInvoiceLine  (orm.Model):
         'sanitary': fields.char('Sanitary', size=10), #TODO
         'sanitary_date': fields.char('Sanitary date', size=10), #TODO
         'extra_code': fields.char('Extra code', size=10), #TODO
-        'sif': fields.char('Sif', size=10), #TODO
+        'sif': fields.char('Sif', size=10), #TODO 
         }
         
 class SsccInvoice  (orm.Model):
@@ -234,8 +272,19 @@ class SsccInvoice  (orm.Model):
     
     _columns = {
         'line_ids': fields.one2many('sscc.invoice.line', 'invoice_id', 'Line'), 
+       
         }
-
+        
+class SsccCode  (orm.Model):
+    """ Model name: SsccCode
+    """
+    
+    _inherit = 'sscc.code'
+    
+    _columns = {
+        'line_ids': fields.one2many('sscc.invoice.line', 'sscc_id', 'Line'), 
+       
+        }
         
         
 
