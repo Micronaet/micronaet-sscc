@@ -44,6 +44,38 @@ class SsccCode(orm.Model):
     _name = 'sscc.code'
     _description = 'SSCC Code'
     
+    # -------------------------------------------------------------------------
+    # Utility:
+    # -------------------------------------------------------------------------
+    def _sscc_check_digit(self, fixed):
+        ''' Generate check digit and return
+        '''
+        tot = 0
+        pos = 0
+        
+        for c in fixed:
+            pos+=1
+            number = int(c)
+            if pos % 2 == 0 :
+                tot += number
+            else:
+                tot += number*3
+        
+        remain = tot % 10
+        if remain:
+            return 10 - remain 
+        else: 
+            return 0
+    
+    def _generate_sscc_code_with_check(self, cr, uid, context=None):
+        ''' Generate partial code with counter and add check digit
+        '''
+        fixed = self.pool.get('ir.sequence').get(
+            cr, uid, 'sscc.code.number')
+            
+        return '%s%s' % (fixed, self._sscc_check_digit(fixed))
+            
+        
     def _get_sscc_code(self, cr, uid, ids, fields, args, context=None):
         ''' Fields function for calculate 
         '''
@@ -71,9 +103,8 @@ class SsccCode(orm.Model):
         }
         
     _defaults = {
-        #'code_type': lambda *x: '3',
-        'name': lambda s, cr, uid, ctx: s.pool.get('ir.sequence').get(
-            cr, uid, 'sscc.code.number'),
+        'name': lambda s, cr, uid, ctx: s._generate_sscc_code_with_check(
+            cr, uid, context=ctx),
         }    
 
 class SsccInvoice  (orm.Model):
@@ -99,8 +130,29 @@ class SsccInvoice  (orm.Model):
                 'sscc_id': code_id,
                 }, context=context)
         return True
+
+    # -------------------------------------------------------------------------
+    # Export function:
+    # -------------------------------------------------------------------------
+    def export_invoice_csv(self, cr, uid, ids, context=None):
+        ''' Import csv file
+        '''
+        # Initial setup_
+        filename = '/home/thebrush/etl/MCS/export.csv' # TODO parametrize
         
+        f_out = open(filename, 'w')
+        #f_out.write()
+        mask = '%6s'
+        # Browse invoice_proxy
+        
+        # Loop invoice line
+        # > f_out.write(mask % (
+              
+        return True    
+        
+    # -------------------------------------------------------------------------
     # Import function:
+    # -------------------------------------------------------------------------
     def import_invoice_csv(self, cr, uid, ids, context=None):
         ''' Import csv file
         '''
@@ -109,7 +161,7 @@ class SsccInvoice  (orm.Model):
         partner_pool = self.pool.get('res.partner')
 
         # Initial setup_
-        filename = '/home/thebrush/etl/MCS/fattura.csv' # TODO
+        filename = '/home/thebrush/etl/MCS/fattura.csv' # TODO parametrize
         
         header = True
         invoice_id = False
