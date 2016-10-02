@@ -137,18 +137,48 @@ class SsccInvoice  (orm.Model):
     def export_invoice_csv(self, cr, uid, ids, context=None):
         ''' Import csv file
         '''
+
         # Initial setup_
         filename = '/home/thebrush/etl/MCS/export.csv' # TODO parametrize
         
+        invoice_proxy = self.browse(cr, uid, ids, context=context)[0]
+       
         f_out = open(filename, 'w')
-        #f_out.write()
-        mask = '%6s'
-        # Browse invoice_proxy
+       
+        mask = '%-6s%-10s%-6s%-10s%-16s%-72s%-2s%-2s%-10s%-8s%-18s%-10s%-12s%-9s%-5s%-13s%-14s%-5s%-5s%-2s%-2s%-2s%-5s%-10s%-10s%-10s%-10s'
         
-        # Loop invoice line
-        # > f_out.write(mask % (
+        for line in invoice_proxy.line_ids:
+            f_out.write( mask % (
+                invoice_proxy.name,
+                invoice_proxy.date,
+                line.order_number,
+                line.order_date,
+                line.code, 
+                line.name, 
+                line.uom, 
+                line.currency,         
+                line.price, 
+                line.duty_code, 
+                line.sscc_id.name,
+                line.trade_number,
+                line.quantity,
+                line.q_x_pack,
+                line.parcel,
+                line.net_weight,
+                line.weight,
+                line.lot,
+                line.deadline,
+                line.country_origin,
+                line.country_from,
+                line.duty_ok,
+                line.mnr_number,
+                line.sanitary,
+                line.sanitary_date,
+                line.extra_code,
+                line.sif,      
+                ))
               
-        return True    
+        return True
         
     # -------------------------------------------------------------------------
     # Import function:

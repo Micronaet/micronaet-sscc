@@ -91,6 +91,7 @@
                                    <field name="state"/>                                                              
                                </page>
                            </notebook>
+                           <button name="export_invoice_csv" string="Export" type="object" />
                            <button name="import_invoice_csv" string="Import" type="object" />
                        </group>     
                    </sheet>     
