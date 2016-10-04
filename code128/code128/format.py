@@ -159,7 +159,6 @@ def code128_format(data, thickness):
     """
     Generate an optimal barcode from a string, full latin_1-charset is supported
     """
-
     text    = str(data).encode('latin_1', 'replace').decode('latin_1')
     pos     = 0
     length  = len(text)

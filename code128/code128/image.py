@@ -35,7 +35,6 @@ def code128_image(data, height=100, thickness=3, quiet_zone=True):
     if (Image is None) or (ImageDraw is None):
         raise ImportError("PIL not found, only SVG output possible")
 
-    import pdb; pdb.set_trace()
     barcode_widths = _format(data, thickness)
     width = sum(barcode_widths)
     x = 0
@@ -56,4 +55,4 @@ def code128_image(data, height=100, thickness=3, quiet_zone=True):
     img.save('prova', 'bmp')
     return img
 if __name__ == '__main__':
-    code128_image('(00)300000010000000017')
+    code128_image('(00)312345671234567894')
