@@ -202,7 +202,9 @@ class SsccInvoice  (orm.Model):
         filename = '/home/thebrush/etl/MCS/export.csv' # TODO parametrize
         invoice_proxy = self.browse(cr, uid, ids, context=context)[0]
         f_out = open(filename, 'w')
-        mask = '%-6s%-10s%-6s%-10s%-16s%-72s%-2s%-2s%-10s%-8s%-18s%-10s%-12s%-9s%-5s%-13s%-14s%-5s%-5s%-2s%-2s%-2s%-5s%-10s%-10s%-10s%-10s'
+        mask = '%-6s%-10s%-6s%-10s%-16s%-72s%-2s%-2s%-10s%-8s%-18s%-10s' + \
+            '%-12s%-9s%-5s%-13s%-14s%-5s%-5s%-2s%-2s%-2s%-5s%-10s%-10s%' + \
+            '-10s%-10s'
         
         for line in invoice_proxy.line_ids:
             f_out.write( mask % (
