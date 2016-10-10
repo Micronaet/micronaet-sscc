@@ -173,7 +173,7 @@ class SsccInvoice  (orm.Model):
             'nodestroy': False,
             }
         
-    def generate_add_new_SSCC_code (self, cr, uid, ids, context=None):
+    def generate_add_new_SSCC_code(self, cr, uid, ids, context=None):
         '''
         '''
         line_pool = self.pool.get('sscc.invoice.line')
