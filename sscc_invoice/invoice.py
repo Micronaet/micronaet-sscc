@@ -84,11 +84,21 @@ class SsccCode(orm.Model):
             res[item.id] = '%s%s' % (item.code_type, item.name)
         return res
         
+    def _get_total_line(self, cr, uid, ids, fields, args, context=None):
+        ''' Fields function for calculate 
+        '''    
+        res = {}
+        for code in self.browse(cr, uid, ids, context=context):
+            res[code.id] = len(code.line_ids)
+        return res
+            
     _columns = {
         'name': fields.char('Counter', size=18, required=True),  
         'create_date': fields.date('Create date', readonly=True),
         'invoice_id': fields.many2one('sscc.invoice', 'Invoice'), 
-        
+        'total_line': fields.function(_get_total_line, method=True, 
+            type='integer', string='Total line', 
+            store=False, readonly=True), 
         
         #'code_type': fields.selection([
         #    ('0', '0'), ('1', '1'), ('2', '2'), ('3', '3'),
@@ -113,6 +123,32 @@ class SsccInvoice  (orm.Model):
     _name = 'sscc.invoice'
     _description = 'SSCC Invoice'
              
+    # Button:
+    def manage_line_in_kanban(self, cr, uid, ids, context=None):
+        ''' Open kanban for SSCC code association 
+        '''
+        if context is None:
+            context = {}
+        model_pool = self.pool.get('ir.model.data')
+        view_id = model_pool.get_object_reference(cr, uid,
+            'sscc_invoice', 'view_sscc_invoice_line_kanban')[1]
+        context['default_invoice_id'] = ids[0]
+        context['invoice_embedded'] = True
+        
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Manage SSCC code'),
+            'view_type': 'form',
+            'view_mode': 'kanban,tree,form',
+            'res_model': 'sscc.invoice.line',
+            'view_id': view_id, # False
+            'views': [(view_id, 'kanban'), (False, 'tree'), (False, 'form')],
+            'domain': [('invoice_id', '=', ids[0])],
+            'context': context,
+            'target': 'current', # 'new'
+            'nodestroy': False,
+            }
+        
     def generate_add_new_SSCC_code (self, cr, uid, ids, context=None):
         '''
         '''
