@@ -60,13 +60,14 @@
            <field name="name">sscc.invoice.tree</field>
            <field name="model">sscc.invoice</field>
            <field name="arch" type="xml">
-               <tree string="SSCC Invoice" >        
+               <tree string="SSCC Invoice" colors="blue:state=='draft';green:state=='assigned';black:state=='closed'">
                      <field name="name" />
                      <field name="date"/>
                      <field name="year"/>
                      <field name="journal"/>
                      <field name="partner_id"/>
                      <field name="partner_code"/>
+                     <field name="state" />
                </tree>
            </field>
         </record>
@@ -76,8 +77,8 @@
             <field name="arch" type="xml">
                 <form string="SSCC Invoice" version="7.0">
                    <header>
-                       <button name="state_assigned" string="Assigned" type="object" attrs="{'invisible': [('state','=','draft')]}"/>
-                       <button name="state_closed" string="Close" type="object" attrs="{'invisible': [('state','=','draft')]}"/>
+                       <button name="state_assigned" string="Assigned" type="object" attrs="{'invisible': [('state','!=','draft')]}"/>
+                       <button name="state_closed" string="Close" type="object" attrs="{'invisible': [('state','!=','draft')]}"/>
                        <field name="state" widget="statusbar" statusbar_visible="draft,assigned,closed"/>
                    </header>
                    <sheet>

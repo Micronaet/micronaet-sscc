@@ -141,7 +141,7 @@ class SsccInvoice  (orm.Model):
                     )
         return self.write(cr, uid, ids, {'state': 'assigned'}, context=context)
             
-    def state_assigned(self, cr, uid, ids, context=None):
+    def state_closed(self, cr, uid, ids, context=None):
         ''' Set invoice as assigned, check all code
         '''
         assert len(ids) == 1, 'Works only with one record a time'
