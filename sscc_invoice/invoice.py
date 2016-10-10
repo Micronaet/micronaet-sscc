@@ -123,7 +123,31 @@ class SsccInvoice  (orm.Model):
     _name = 'sscc.invoice'
     _description = 'SSCC Invoice'
              
+    # -------------------------------------------------------------------------         
     # Button:
+    # -------------------------------------------------------------------------         
+    # Workflow-like button:
+    def state_assigned(self, cr, uid, ids, context=None):
+        ''' Set invoice as assigned, check all code
+        '''
+        assert len(ids) == 1, 'Works only with one record a time'
+        
+        invoice_proxy = self.browse(cr, uid, ids, context=context)[0]
+        for line in invoice_proxy.line_ids:
+            if not line.sscc_id:
+                raise osv.except_osv(
+                    _('Error'), 
+                    _('Not all line has SSCC code!'),
+                    )
+        return self.write(cr, uid, ids, {'state': 'assigned'}, context=context)
+            
+    def state_assigned(self, cr, uid, ids, context=None):
+        ''' Set invoice as assigned, check all code
+        '''
+        assert len(ids) == 1, 'Works only with one record a time'
+
+        return self.write(cr, uid, ids, {'state': 'closed'}, context=context)
+    
     def manage_line_in_kanban(self, cr, uid, ids, context=None):
         ''' Open kanban for SSCC code association 
         '''
@@ -338,7 +362,7 @@ class SsccInvoice  (orm.Model):
         'state': fields.selection([
             ('draft', 'Draft'),
             ('assigned', 'Assigned'),
-            ('Closed', 'Closed'),
+            ('closed', 'Closed'),
             ], 'State', readonly=True),
         }
                  

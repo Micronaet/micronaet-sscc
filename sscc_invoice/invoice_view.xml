@@ -75,6 +75,11 @@
             <field name="model">sscc.invoice</field>
             <field name="arch" type="xml">
                 <form string="SSCC Invoice" version="7.0">
+                   <header>
+                       <button name="state_assigned" string="Assigned" type="object" attrs="{'invisible': [('state','=','draft')]}"/>
+                       <button name="state_closed" string="Close" type="object" attrs="{'invisible': [('state','=','draft')]}"/>
+                       <field name="state" widget="statusbar" statusbar_visible="draft,assigned,closed"/>
+                   </header>
                    <sheet>
                        <group colspan="4" col="4">
                            <field name="name" />
@@ -176,7 +181,6 @@
                                     </a>-->
                                 </div>
                                 <div class="oe_clear"></div>
-
                             </div>
                         </t>
                     </templates>
@@ -187,16 +191,16 @@
             <field name="name">sscc.invoice.line.tree</field>
             <field name="model">sscc.invoice.line</field>
             <field name="arch" type="xml">
-                <tree string="SSCC Invoice Line" colors="res:sscc_id==False">        
-                           <field name="name" />
-                           <field name="code"/>
-                           <field name="uom"/>            
-                           <field name="price"/>
-                           <field name="currency"/>
-                          <!--<field name="invoice_id"/>-->
-                           <field name="sscc_id"/>                         
-                           <field name="quantity"/>              
-                           <field name="lot"/>
+                <tree string="SSCC Invoice Line" colors="red:sscc_id==False">        
+                   <field name="name" />
+                   <field name="code"/>
+                   <field name="uom"/>            
+                   <field name="price"/>
+                   <field name="currency"/>
+                   <!--<field name="invoice_id"/>-->
+                   <field name="sscc_id"/>                         
+                   <field name="quantity"/>              
+                   <field name="lot"/>
                 </tree>
             </field>
         </record>
@@ -232,8 +236,7 @@
                            <field name="sanitary"/>
                            <field name="sanitary_date"/>
                            <field name="extra_code"/>
-                           <field name="sif"/> 
-                           
+                           <field name="sif"/>                            
                        </group>     
                    </sheet>     
                 </form>
@@ -264,8 +267,6 @@
             <field name="context">{}</field>
             <field name="domain">[]</field>
         </record>
-                    
-                      
                
         <menuitem
             parent="base.menu_base_partner" 
@@ -291,10 +292,6 @@
                 action="action_sscc_invoice_line"
                 sequence="25"                
                 />
-            
-            
-        
-
     </data>
 </openerp>
 
