@@ -21,6 +21,7 @@ import os
 import sys
 import logging
 import openerp
+import base64
 import openerp.netsvc as netsvc
 import openerp.addons.decimal_precision as dp
 from openerp.osv import fields, osv, expression, orm
@@ -68,9 +69,9 @@ class SsccCode(orm.Model):
             
         # Create folder if not present:
         base = config_proxy.value
-        os.system('mkdir -p %s' % os.path.join(base, 'history')
-        os.system('mkdir -p %s' % os.path.join(base, 'xls')
-        os.system('mkdir -p %s' % os.path.join(base, 'codebar')
+        os.system('mkdir -p %s' % os.path.join(base, 'history'))
+        os.system('mkdir -p %s' % os.path.join(base, 'xls'))
+        os.system('mkdir -p %s' % os.path.join(base, 'codebar'))
         return base
 
     # -------------------------------------------------------------------------
@@ -131,11 +132,11 @@ class SsccCode(orm.Model):
         
         extension = 'gif'
         res = dict.fromkeys(ids, False)
-        
+
         for code in self.browse(cr, uid, ids, context=context):
             try:
                 fullname = os.path.join(path, '%s.%s' % (code.name, extension))
-                f = open(filename, 'rb')
+                f = open(fullname, 'rb')
                 res[code.id] = base64.encodestring(f.read())
                 f.close()
             except:
@@ -257,7 +258,7 @@ class SsccInvoice  (orm.Model):
         
             
         invoice_proxy = self.browse(cr, uid, ids, context=context)[0]
-        filename = os.path.join(path, '' % (invoice_proxy.name, extension)
+        filename = os.path.join(path, '' % (invoice_proxy.name, extension))
         f_out = open(filename, 'w')
         mask = '%-6s%-10s%-6s%-10s%-16s%-72s%-2s%-2s%-10s%-8s%-18s%-10s' + \
             '%-12s%-9s%-5s%-13s%-14s%-5s%-5s%-2s%-2s%-2s%-5s%-10s%-10s%' + \
