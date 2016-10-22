@@ -35,13 +35,8 @@
             <field name="model">sscc.code</field>
             <field name="arch" type="xml">
                 <search string="SSCC Code" version="7.0">        
-                    <field name="name" />
-                    <!--<field name="partner_id" filter_domain="[('partner_id','=',self)]"/>
-                    <filter name="state_draft" string="Draft state" domain="[('state','=','draft')]"/>
-                    <group expand="0" string="Group By...">
-                        <filter name="group_partner" string="Partner" context="{'group_by': 'partner_id'}"/>
-                        <filter string="Status" context="{'group_by': 'state'}" />
-                    </group>-->
+                    <field name="name" />                    
+                    <field name="invoice_id" />                    
                 </search>
             </field>
         </record>
@@ -68,6 +63,8 @@
                      <field name="partner_id"/>
                      <field name="partner_code"/>
                      <field name="state" />
+                     <button name="state_assigned" string="Assigned" type="object" attrs="{'invisible': [('state','!=','draft')]}" icon="STOCK_LEAVE_FULLSCREEN"/>
+                     <button name="state_closed" string="Close" type="object" attrs="{'invisible': [('state','!=','draft')]}" icon="terp-camera_test"/>
                </tree>
            </field>
         </record>
@@ -77,8 +74,8 @@
             <field name="arch" type="xml">
                 <form string="SSCC Invoice" version="7.0">
                    <header>
-                       <button name="state_assigned" string="Assigned" type="object" attrs="{'invisible': [('state','!=','draft')]}"/>
-                       <button name="state_closed" string="Close" type="object" attrs="{'invisible': [('state','!=','draft')]}"/>
+                       <button name="state_assigned" string="Assigned" type="object" attrs="{'invisible': [('state','!=','draft')]}" icon="STOCK_LEAVE_FULLSCREEN"/>
+                       <button name="state_closed" string="Close" type="object" attrs="{'invisible': [('state','!=','draft')]}" icon="terp-camera_test"/>
                        <field name="state" widget="statusbar" statusbar_visible="draft,assigned,closed"/>
                    </header>
                    <sheet>
@@ -114,13 +111,19 @@
             <field name="arch" type="xml">
                 <search string="SSCC Invoice" version="7.0">        
                     <field name="name" />
-                    <field name="state"/>
-                    <!--<field name="partner_id" filter_domain="[('partner_id','=',self)]"/>
+                    <field name="partner_code"/>
+                    <field name="partner_id" filter_domain="[('partner_id','=',self)]"/>
+                    
                     <filter name="state_draft" string="Draft state" domain="[('state','=','draft')]"/>
+                    <filter name="state_assigned" string="Draft assigned" domain="[('state','=','assigned')]"/>
+                    <filter name="state_closed" string="Draft closed" domain="[('state','=','closed')]"/>
+                    
                     <group expand="0" string="Group By...">
                         <filter name="group_partner" string="Partner" context="{'group_by': 'partner_id'}"/>
+                        <filter string="Date" context="{'group_by': 'date'}" />
+                        <filter string="Year" context="{'group_by': 'year'}" />
                         <filter string="Status" context="{'group_by': 'state'}" />
-                    </group>-->
+                    </group>
                 </search>
             </field>
         </record>

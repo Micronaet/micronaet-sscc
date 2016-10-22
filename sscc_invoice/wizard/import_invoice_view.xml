@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+       <!-- account.invoice.import.sscc.csv -->
+       <record id="account_invoice_import_sscc_csv_wizard_view" model="ir.ui.view">
+            <field name="name">Import SSCC invoice</field>
+            <field name="model">account.invoice.import.sscc.csv</field>
+            <field name="arch" type="xml">
+                <form string="Import SSCC invoice Wizard" version="7.0">
+                   <header>
+                       <button string="Cancel" special="cancel" />
+                       <button name="action_import" string="Import invoice" type="object" icon="gtk-jump-to" class="oe_highlight" />
+                   </header>                   
+                   <group colspan="4" col="4">
+                        <separator string="Manage SSCC invoice procedure:" colspan="4"/>
+                        <field name="note" nolabel="1" colspan="4" readonly="1" widget="html"/>                        
+                   </group>
+                </form>
+            </field>
+      </record>
+
+      <record model="ir.actions.act_window" id="action_account_invoice_import_sscc_csv_wizard_view">
+          <field name="name">Import SSCC invoice</field>
+          <field name="res_model">account.invoice.import.sscc.csv</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">form</field>
+          <field name="target">new</field>
+          <field name="view_id" ref="account_invoice_import_sscc_csv_wizard_view"/>
+      </record> 
+      <menuitem 
+          parent="menu_sscc_code_management_root" 
+          id="menu_account_invoice_import_sscc_csv_wizard" 
+          action="action_account_invoice_import_sscc_csv_wizard_view"
+          sequence="99"
+          />
+      
+    </data>
+</openerp>
