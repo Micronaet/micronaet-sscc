@@ -318,11 +318,13 @@ class SsccInvoice  (orm.Model):
                 continue
             
             filename = os.path.join(path, f)
+            filename_h = os.path.join(path_history, f)
         
             header = True
             invoice_id = False
             _logger.info('Import invoice %s' % filename)
-            for line in open(filename, 'r'):
+            f_invoice = open(filename, 'r')
+            for line in f_invoice:
                 # -------------------------------------------------------------
                 # Header data:            
                 # -------------------------------------------------------------
@@ -413,6 +415,8 @@ class SsccInvoice  (orm.Model):
                     #'extra_code'
                     #'sif' 
                     }, context=context)                   
+            f_invoice.close()
+            os.rename(filename, filename_h)        
         return True
         
     _columns = {
