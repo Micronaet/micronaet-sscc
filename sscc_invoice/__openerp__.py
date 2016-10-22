@@ -38,6 +38,7 @@
         'invoice_view.xml', 
         'counter.xml',
         'wizard/import_invoice_view.xml',
+        'report/sscc_label_report.xml',
         'scheduler.xml',
         ],
         
