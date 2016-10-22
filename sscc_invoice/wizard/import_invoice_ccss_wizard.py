@@ -52,14 +52,9 @@ class AccountInvoiceImportSsccCsv(orm.TransientModel):
     def action_import(self, cr, uid, ids, context=None):
         ''' Event for button import
         '''
-        if context is None: 
-            context = {}        
-
-        # view_sscc_invoice_tree
-        # view_sscc_invoice_search
-        model_pool = self.pool.get('ir.model.data')
-        #view_id = model_pool.get_object_reference(
-        #    cr, uid, 'module_name', 'view_name')[1]
+        # Call function for import invoice:
+        self.pool.get('sscc.invoice').import_invoice_csv(
+            cr, uid, context=context)
         
         return {
             'type': 'ir.actions.act_window',

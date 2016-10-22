@@ -74,6 +74,8 @@
             <field name="arch" type="xml">
                 <form string="SSCC Invoice" version="7.0">
                    <header>
+                       <button name="generate_add_new_SSCC_code" class="oe_highlight" string="Generate SSCC code" type="object" icon="gtk-execute" help="First code generated auto link all product line, next code better generating in kanban view for see the element!"/>
+                       
                        <button name="state_assigned" string="Assigned" type="object" attrs="{'invisible': [('state','!=','draft')]}" icon="STOCK_LEAVE_FULLSCREEN"/>
                        <button name="state_closed" string="Close" type="object" attrs="{'invisible': [('state','!=','draft')]}" icon="terp-camera_test"/>
                        <field name="state" widget="statusbar" statusbar_visible="draft,assigned,closed"/>
@@ -86,11 +88,10 @@
                            <field name="journal"/>
                            <field name="partner_id"/>
                            <field name="partner_code"/>
-                           <button name="generate_add_new_SSCC_code" string="Add new SSCC code" type="object" />
                            <notebook colspan="4">
                                <page string="Line">
-                                   <button name="manage_line_in_kanban" string="Manage SSCC position" type="object" />
-                                   <separator name="Line Ids" colspan="4"/>
+                                   <button name="manage_line_in_kanban" string="Manage SSCC assign" type="object" />
+                                   <separator string="Line IDs" colspan="4"/>
                                    <field name="line_ids" colspan="4" col="4" nolabel="1" />
                                </page>
                                <page string="Sscc Code">

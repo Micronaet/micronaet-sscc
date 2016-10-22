@@ -239,10 +239,10 @@ class SsccInvoice  (orm.Model):
         return True
         
     # -------------------------------------------------------------------------
-    # Import function:
+    # Import function (used from button and from scheduling action:
     # -------------------------------------------------------------------------
-    def import_invoice_csv(self, cr, uid, ids, context=None):
-        ''' Import csv file
+    def import_invoice_csv(self, cr, uid, context=None):
+        ''' Import csv file from default path (all invoice found!)
         '''
         # Pool used:
         line_pool = self.pool.get('sscc.invoice.line')
