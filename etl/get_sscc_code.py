@@ -39,7 +39,7 @@ def _sscc_check_digit(fixed):
     else: 
         return 0
 
-for i in range(10):#(1000000000):
+for i in range(100):#(1000000000):
     sscc = '38004766%09d' % i
     sscc = '%s%s' % (sscc, _sscc_check_digit(sscc))
     
