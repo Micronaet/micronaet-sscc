@@ -18,7 +18,17 @@
 #
 ###############################################################################
 import urllib2
+import sys
 from PIL import Image
+
+if len(sys.argv) == 2:
+    from_code = sys.arv[0]
+    to_code = sys.arv[1]
+elif len(sys.argv) == 1:
+    from_code = sys.arv[0]
+    to_code = sys.arv[0] + 1
+else:
+    sys.exit()
 
 def _sscc_check_digit(fixed):
     ''' Generate check digit and return
@@ -39,7 +49,7 @@ def _sscc_check_digit(fixed):
     else: 
         return 0
 
-for i in range(100):#(1000000000):
+for i in range(from_code, to_code):#(1000000000)
     sscc = '38004766%09d' % i
     sscc = '%s%s' % (sscc, _sscc_check_digit(sscc))
     
