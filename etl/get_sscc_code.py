@@ -22,11 +22,11 @@ import sys
 from PIL import Image
 
 if len(sys.argv) == 3:
-    from_code = sys.arv[1]
-    to_code = sys.arv[2]
+    from_code = sys.argv[1]
+    to_code = sys.argv[2]
 elif len(sys.argv) == 2:
-    from_code = sys.arv[1]
-    to_code = sys.arv[1] + 1
+    from_code = sys.argv[1]
+    to_code = sys.argv[1] + 1
 else:
     sys.exit()
 
