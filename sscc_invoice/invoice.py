@@ -126,7 +126,7 @@ class SsccInvoice  (orm.Model):
     # -------------------------------------------------------------------------         
     # Button:
     # -------------------------------------------------------------------------         
-    # Workflow-like button:
+    # Workflow button:
     def state_assigned(self, cr, uid, ids, context=None):
         ''' Set invoice as assigned, check all code
         '''
