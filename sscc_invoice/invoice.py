@@ -359,25 +359,25 @@ class SsccInvoice  (orm.Model):
                 # Row data:
                 # -------------------------------------------------------------
                 # Fields:
-                order_number = line[16:22] # 6
-                order_date = line[22:32] # 10
-                code = line[32:48] # 16
-                description = line[48:120] # 72
-                uom = line[120:122] # 2
-                currency = line[122:124] # 2         
-                price = line[124:134] # 10
-                duty_code = line[134:142] # 8
-                #sscc = line[142:160] # 18
-                trade_number = line[160:170] # 10
-                quantity = line[170:182] # 12
-                q_x_pack = line[182:191] # 9
-                parcel = line[191:196] # 5
-                net_weight = line[196:209] # 13
-                weight = line[209:223] # 14
-                lot = line[223:228] # 5
-                deadline = line[228:233] # 5
-                country_origin = line[233:235] # 2
-                country_from = line[235:237] # 2
+                order_number = line[16:22].strip() # 6
+                order_date = line[22:32].strip() or False# 10
+                code = line[32:48].strip() # 16
+                description = line[48:120].strip() # 72
+                uom = line[120:122].strip() # 2
+                currency = line[122:124].strip() # 2         
+                price = line[124:134].strip() # 10
+                duty_code = line[134:142].strip() # 8
+                #sscc = line[142:160].strip() # 18
+                trade_number = line[160:170].strip() # 10
+                quantity = line[170:182].strip() # 12
+                q_x_pack = line[182:191].strip() # 9
+                parcel = line[191:196].strip() # 5
+                net_weight = line[196:209].strip() # 13
+                weight = line[209:223].strip() # 14
+                lot = line[223:228].strip() # 5
+                deadline = line[228:233].strip() # 5
+                country_origin = line[233:235].strip() # 2
+                country_from = line[235:237].strip() # 2
                 #duty_ok = line[237:239] # 2
                 #mnr_number = line[239:244] # 5 
                 #sanitary = line[244:254] # 10
