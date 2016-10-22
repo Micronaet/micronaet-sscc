@@ -40,6 +40,7 @@
         'wizard/import_invoice_view.xml',
         'report/sscc_label_report.xml',
         'scheduler.xml',
+        'data/config_data.xml',
         ],
         
     'active': False,
