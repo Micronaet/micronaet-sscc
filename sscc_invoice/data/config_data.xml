@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<openerp>
+    <data noupdate="1"> 
+        <record model="ir.config_parameter" id="parameter_sscc_invoice_base_path">
+            <field name="key">sscc.invoice.base.path</field>
+            <field name="value">~/script/SSCC</field>
+        </record>
+    </data>
+</openerp>
+

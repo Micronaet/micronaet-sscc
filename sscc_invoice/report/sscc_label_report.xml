@@ -7,9 +7,9 @@
         <field name="model">sscc.invoice</field>
         <field name="report_name">sscc_invoice_label_report</field>
         <field name="report_type">aeroo</field>
-        <field name="in_format">oo-ods</field>
+        <field name="in_format">oo-odt</field>
         <field name="parser_loc">sscc_invoice/report/sscc_label_parser.py</field>
-        <field name="report_rml">sscc_invoice/report/sscc_label.ods</field>
+        <field name="report_rml">sscc_invoice/report/sscc_label.odt</field>
         <field name="parser_state">loc</field>
         <field name="tml_source">file</field>
     </record>

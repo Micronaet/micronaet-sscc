@@ -44,8 +44,37 @@ class SsccCode(orm.Model):
     _name = 'sscc.code'
     _description = 'SSCC Code'
     
-    # -------------------------------------------------------------------------
+    # -------------------------------------------------------------------------    
     # Utility:
+    # -------------------------------------------------------------------------    
+    # Folder config base path:
+    def get_config_base_label_path(self, cr, uid, context=None):
+        ''' Read parameter: 
+        '''    
+        key = 'sscc.invoice.base.path'
+        
+        config_pool = self.pool.get('ir.config_parameter')
+        config_ids = config_pool.search(cr, uid, [
+            ('key', '=', key)], context=context)
+        if not config_ids:
+            _logger.warning('Parameter not found: %s' % key)
+            raise osv.except_osv(
+                _('Parameter error'), 
+                _('Setup init parameter: %s' % key),
+                )
+
+        config_proxy = config_pool.browse(
+            cr, uid, config_ids, context=context)[0]
+            
+        # Create folder if not present:
+        base = config_proxy.value
+        os.system('mkdir -p %s' % os.path.join(base, 'history')
+        os.system('mkdir -p %s' % os.path.join(base, 'xls')
+        os.system('mkdir -p %s' % os.path.join(base, 'codebar')
+        return base
+
+    # -------------------------------------------------------------------------
+    # Utility for syntax:
     # -------------------------------------------------------------------------
     def _sscc_check_digit(self, fixed):
         ''' Generate check digit and return
@@ -91,6 +120,27 @@ class SsccCode(orm.Model):
         for code in self.browse(cr, uid, ids, context=context):
             res[code.id] = len(code.line_ids)
         return res
+
+    def _get_sscc_codebar_image(self, cr, uid, ids, field_name, arg, 
+            context=None):
+        ''' Get image from SSCC folder GIF image
+        '''
+        code_pool = self.pool.get('sscc.code')
+        path = code_pool.get_config_base_label_path(cr, uid, context=context)
+        path = os.path.join(path, 'codebar')
+        
+        extension = 'gif'
+        res = dict.fromkeys(ids, False)
+        
+        for code in self.browse(cr, uid, ids, context=context):
+            try:
+                fullname = os.path.join(path, '%s.%s' % (code.name, extension))
+                f = open(filename, 'rb')
+                res[code.id] = base64.encodestring(f.read())
+                f.close()
+            except:
+                _logger.error('Cannot load: %s' % fullname)
+        return res            
             
     _columns = {
         'name': fields.char('Counter', size=18, required=True),  
@@ -99,6 +149,8 @@ class SsccCode(orm.Model):
         'total_line': fields.function(_get_total_line, method=True, 
             type='integer', string='Total line', 
             store=False, readonly=True), 
+        'codebar_image': fields.function(
+            _get_sscc_codebar_image, type='binary', method=True),
         
         #'code_type': fields.selection([
         #    ('0', '0'), ('1', '1'), ('2', '2'), ('3', '3'),
@@ -197,10 +249,15 @@ class SsccInvoice  (orm.Model):
     def export_invoice_csv(self, cr, uid, ids, context=None):
         ''' Import csv file
         '''
-
-        # Initial setup:
-        filename = '/home/thebrush/etl/MCS/export.csv' # TODO parametrize
+        # Init setup:
+        extension = 'xls'
+        code_pool = self.pool.get('sscc.code')
+        path = code_pool.get_config_base_label_path(cr, uid, context=context)
+        path_history = os.path.join(path, 'xls')
+        
+            
         invoice_proxy = self.browse(cr, uid, ids, context=context)[0]
+        filename = os.path.join(path, '' % (invoice_proxy.name, extension)
         f_out = open(filename, 'w')
         mask = '%-6s%-10s%-6s%-10s%-16s%-72s%-2s%-2s%-10s%-8s%-18s%-10s' + \
             '%-12s%-9s%-5s%-13s%-14s%-5s%-5s%-2s%-2s%-2s%-5s%-10s%-10s%' + \
@@ -247,106 +304,115 @@ class SsccInvoice  (orm.Model):
         # Pool used:
         line_pool = self.pool.get('sscc.invoice.line')
         partner_pool = self.pool.get('res.partner')
+        code_pool = self.pool.get('sscc.code')
 
-        # Initial setup_
-        filename = '/home/thebrush/etl/MCS/fattura.csv' # TODO parametrize
+        # Init setup:
+        extension = 'csv'
+        path = code_pool.get_config_base_label_path(cr, uid, context=context)
+        path_history = os.path.join(path, 'history')
         
-        header = True
-        invoice_id = False
-        _logger.info('Import invoice %s' % filename)
-        for line in open(filename, 'r'):
-            # -----------------------------------------------------------------     
-            # Header data:            
-            # -----------------------------------------------------------------     
-            if header:               
-                header = False                
-
-                # Fields:
-                number_invoice = line[0:6] # 6
-                date_invoice = line[6:16] # 10
-                partner_code = line[284:293].strip() # 9 (end file)
-                
-                # Calculated fields:
-                partner_id = False
-                if partner_code: 
-                    partner_ids = partner_pool.search(cr, uid, [
-                        ('sql_customer_code', '=', partner_code),
-                        ], context=context)
-                    if partner_ids:
-                        partner_id = partner_ids[0]
-               
-                # TODO check number invoice first
-                
-                # Create invoice header
-                invoice_id = self.create(cr, uid, {
-                    'name': number_invoice,
-                    'date': date_invoice,
-                    'year': date_invoice[:4],                    
-                    'partner_id': partner_id,
-                    'partner_code': partner_code,
-                    #'journal':
-                    }, context=context)
-                        
-            # -----------------------------------------------------------------     
-            # Row data:
-            # -----------------------------------------------------------------     
-            # Fields:
-            order_number = line[16:22] # 6
-            order_date = line[22:32] # 10
-            code = line[32:48] # 16
-            description = line[48:120] # 72
-            uom = line[120:122] # 2
-            currency = line[122:124] # 2         
-            price = line[124:134] # 10
-            duty_code = line[134:142] # 8
-            #sscc = line[142:160] # 18
-            trade_number = line[160:170] # 10
-            quantity = line[170:182] # 12
-            q_x_pack = line[182:191] # 9
-            parcel = line[191:196] # 5
-            net_weight = line[196:209] # 13
-            weight = line[209:223] # 14
-            lot = line[223:228] # 5
-            deadline = line[228:233] # 5
-            country_origin = line[233:235] # 2
-            country_from = line[235:237] # 2
-            #duty_ok = line[237:239] # 2
-            #mnr_number = line[239:244] # 5 
-            #sanitary = line[244:254] # 10
-            #sanitary_date = line[254:264] # 10
-            #extra_code = line[264:274] # 10
-            #sif = line[274:284] # 10            
+        for f in os.listdir(path):
+            if f[-3:] != extension:
+                _logger.warning('Jump no CSV file: %s' % f)
+                continue
             
-            # Create invoice line 
-            line_pool.create(cr, uid, {
-                'invoice_id': invoice_id,
-                'name': description,
-                'code': code,
-                'uom': uom,
-                'currency': currency,
-                'price': price, 
-                'quantity': quantity,
-                'order_date': order_date,
-                'order_number': order_number,
-                'duty_code': duty_code,
-                'q_x_pack': q_x_pack,
-                'quantity': quantity,
-                'parcel': parcel,
-                'net_weight': net_weight,
-                'weight': weight,
-                'lot': lot,
-                'deadline': deadline,
-                'country_origin': country_origin,
-                'country_from': country_from,                 
-                #'duty_ok'
-                #'mnr_number'
-                #'sanitary'
-                #'sanitary_date'
-                #'extra_code'
-                #'sif' 
-                }, context=context)
-               
-        return True # TODO return view with invoice!
+            filename = os.path.join(path, f)
+        
+            header = True
+            invoice_id = False
+            _logger.info('Import invoice %s' % filename)
+            for line in open(filename, 'r'):
+                # -------------------------------------------------------------
+                # Header data:            
+                # -------------------------------------------------------------
+                if header:               
+                    header = False                
+
+                    # Fields:
+                    number_invoice = line[0:6] # 6
+                    date_invoice = line[6:16] # 10
+                    partner_code = line[284:293].strip() # 9 (end file)
+                    
+                    # Calculated fields:
+                    partner_id = False
+                    if partner_code: 
+                        partner_ids = partner_pool.search(cr, uid, [
+                            ('sql_customer_code', '=', partner_code),
+                            ], context=context)
+                        if partner_ids:
+                            partner_id = partner_ids[0]
+                   
+                    # TODO check number invoice first
+                    
+                    # Create invoice header
+                    invoice_id = self.create(cr, uid, {
+                        'name': number_invoice,
+                        'date': date_invoice,
+                        'year': date_invoice[:4],                    
+                        'partner_id': partner_id,
+                        'partner_code': partner_code,
+                        #'journal':
+                        }, context=context)
+                            
+                # -------------------------------------------------------------
+                # Row data:
+                # -------------------------------------------------------------
+                # Fields:
+                order_number = line[16:22] # 6
+                order_date = line[22:32] # 10
+                code = line[32:48] # 16
+                description = line[48:120] # 72
+                uom = line[120:122] # 2
+                currency = line[122:124] # 2         
+                price = line[124:134] # 10
+                duty_code = line[134:142] # 8
+                #sscc = line[142:160] # 18
+                trade_number = line[160:170] # 10
+                quantity = line[170:182] # 12
+                q_x_pack = line[182:191] # 9
+                parcel = line[191:196] # 5
+                net_weight = line[196:209] # 13
+                weight = line[209:223] # 14
+                lot = line[223:228] # 5
+                deadline = line[228:233] # 5
+                country_origin = line[233:235] # 2
+                country_from = line[235:237] # 2
+                #duty_ok = line[237:239] # 2
+                #mnr_number = line[239:244] # 5 
+                #sanitary = line[244:254] # 10
+                #sanitary_date = line[254:264] # 10
+                #extra_code = line[264:274] # 10
+                #sif = line[274:284] # 10            
+                
+                # Create invoice line 
+                line_pool.create(cr, uid, {
+                    'invoice_id': invoice_id,
+                    'name': description,
+                    'code': code,
+                    'uom': uom,
+                    'currency': currency,
+                    'price': price, 
+                    'quantity': quantity,
+                    'order_date': order_date,
+                    'order_number': order_number,
+                    'duty_code': duty_code,
+                    'q_x_pack': q_x_pack,
+                    'quantity': quantity,
+                    'parcel': parcel,
+                    'net_weight': net_weight,
+                    'weight': weight,
+                    'lot': lot,
+                    'deadline': deadline,
+                    'country_origin': country_origin,
+                    'country_from': country_from,                 
+                    #'duty_ok'
+                    #'mnr_number'
+                    #'sanitary'
+                    #'sanitary_date'
+                    #'extra_code'
+                    #'sif' 
+                    }, context=context)                   
+        return True
         
     _columns = {
         'name': fields.char('Number', size=15, required=True),
