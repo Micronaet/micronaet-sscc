@@ -70,7 +70,7 @@ class SsccCode(orm.Model):
         # Create folder if not present:
         base = config_proxy.value
         os.system('mkdir -p %s' % os.path.join(base, 'history'))
-        os.system('mkdir -p %s' % os.path.join(base, 'csv'))
+        #os.system('mkdir -p %s' % os.path.join(base, 'csv'))
         os.system('mkdir -p %s' % os.path.join(base, 'xls'))
         os.system('mkdir -p %s' % os.path.join(base, 'codebar'))
         return base
@@ -268,7 +268,7 @@ class SsccInvoice  (orm.Model):
         extension = 'csv'
         code_pool = self.pool.get('sscc.code')
         path = code_pool.get_config_base_label_path(cr, uid, context=context)
-        path = os.path.join(path, 'csv')
+        path = os.path.join(path, 'xls')
         
             
         invoice_proxy = self.browse(cr, uid, ids, context=context)[0]
