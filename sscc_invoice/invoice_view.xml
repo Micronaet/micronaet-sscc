@@ -220,6 +220,7 @@
                    <field name="q_x_pack"/>
                    <field name="parcel"/>
                    <field name="lot"/>
+                   <field name="deadline"/>
                    <field name="net_weight"/>
                    <field name="weight"/>
                 </tree>

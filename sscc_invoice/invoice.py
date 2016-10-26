@@ -250,6 +250,13 @@ class SsccInvoice  (orm.Model):
     def export_invoice_csv(self, cr, uid, ids, context=None):
         ''' Import csv file
         '''
+        # Utility:
+        def format_date(v):
+            if v:
+                return '%s/%s/%s' % (v[8:10], v[5:7], v[:4])
+            else:
+                return ''
+                
         # Init setup:
         extension = 'xls'
         code_pool = self.pool.get('sscc.code')
@@ -260,39 +267,51 @@ class SsccInvoice  (orm.Model):
         invoice_proxy = self.browse(cr, uid, ids, context=context)[0]
         filename = os.path.join(path, '%s.%s' % (invoice_proxy.name, extension))
         f_out = open(filename, 'w')
-        mask = '%-6s%-10s%-6s%-10s%-16s%-72s%-2s%-2s%-10s%-8s%-18s%-10s' + \
-            '%-12s%-9s%-5s%-13s%-14s%-5s%-5s%-2s%-2s%-2s%-5s%-10s%-10s%' + \
-            '-10s%-10s'
+
+        mask_h = '|||||H|%s|%s|%s|%s\n'
+
+        mask_d = '|||||||||||||||||||||||D|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|' + \
+            '%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s\n'
         
+        first = True
         for line in invoice_proxy.line_ids:
-            f_out.write( mask % (
-                invoice_proxy.name,
-                invoice_proxy.date,
-                line.order_number,
-                line.order_date,
-                line.code, 
-                line.name, 
-                line.uom, 
-                line.currency,         
-                line.price, 
-                line.duty_code, 
-                line.sscc_id.name,
-                line.trade_number,
-                line.quantity,
-                line.q_x_pack,
-                line.parcel,
-                line.net_weight,
-                line.weight,
-                line.lot,
-                line.deadline,
-                line.country_origin,
-                line.country_from,
-                line.duty_ok,
-                line.mnr_number,
-                line.sanitary,
-                line.sanitary_date,
-                line.extra_code,
-                line.sif,      
+            if first:
+                f_out.write(mask_h % (
+                    line.order_number, # Order number (mand.)
+                    invoice_proxy.name, # DDT number (mand.)
+                    format_date(invoice_proxy.date), # DDT date
+                    format_date(order.order_date), # Delivery order date 
+                    )
+                first = False
+                continue
+                
+            f_out.write(mask_d % (
+                line.code, # Article code
+                line.duty_code, # HS code 
+                line.sscc_id.name, # SSCC pallet code
+                line.trade_number, # GTIN Trade code
+                'N', # variable weight
+                line.lot, # lot number
+                line.quantity, # Confirmed quantity 14.3
+                line.weight, # Weight lord
+                line.parcel, # Parcels 
+                line.q_x_pack, # Q. per pack. 14.3
+                line.deadline, # Deadline date DD/MM/YYYY
+                line.country_origin, # Last country for transformed
+                line.country_from, # Country from 
+                line.sanitary, # Number document sanitary
+                line.sanitary_date, # Date of sanitary document
+                '', # ANIMO code
+                line.sif, # SIF code
+                'Y' if line.duty_ok else 'N', # Duty document?
+                invoice_proxy.name, # Invoice number
+                '', # number document or duty
+                #line.mnr_number,
+                #line.uom, 
+                #line.currency,         
+                #line.price, 
+                #line.net_weight,
+                #line.extra_code,
                 ))              
         return True
         
