@@ -252,6 +252,12 @@ class SsccInvoice  (orm.Model):
         ''' Import csv file
         '''
         # Utility:
+        def format_float(f):
+            if f:
+                return '%14.3f' % float(f.replace(',', '.'))
+            else:
+                return '0.0'
+                
         def format_date(v):
             if v:
                 return '%s/%s/%s' % (v[8:10], v[5:7], v[:4])
@@ -287,25 +293,27 @@ class SsccInvoice  (orm.Model):
                 continue
                 
             f_out.write(mask_d % (
-                line.code, # Article code
-                line.duty_code, # HS code 
+                line.code or '', # Article code
+                line.duty_code or '', # HS code 
                 line.sscc_id.name, # SSCC pallet code
-                line.trade_number, # GTIN Trade code
+                line.trade_number or '', # GTIN Trade code
                 'N', # variable weight
-                line.lot, # lot number
-                line.quantity, # Confirmed quantity 14.3
-                line.weight, # Weight lord
-                line.parcel, # Parcels 
-                line.q_x_pack, # Q. per pack. 14.3
-                line.deadline, # Deadline date DD/MM/YYYY
-                line.country_origin, # Last country for transformed
-                line.country_from, # Country from 
-                line.sanitary, # Number document sanitary
-                line.sanitary_date, # Date of sanitary document
+                line.lot or '', # lot number
+                format_float(line.quantity), # Confirmed quantity 14.3
+                format_float(line.net_weight), # Weight net
+                format_float(line.weight), # Weight lord
+                line.parcel or '', # Parcels 
+                format_float(line.q_x_pack), # Q. per pack. 14.3
+                line.deadline or '', # Deadline date DD/MM/YYYY
+                line.country_origin or '', # Last country for transformed
+                line.country_from or '', # Country from 
+                line.sanitary or '', # Number document sanitary
+                format_date(line.sanitary_date), # Date of sanitary document
                 '', # ANIMO code
-                line.sif, # SIF code
+                line.sif or '', # SIF code
                 'Y' if line.duty_ok else 'N', # Duty document?
-                invoice_proxy.name, # Invoice number
+                invoice_proxy.name or '', # Invoice number
+                format_date(invoice_proxy.date), # Invoice date
                 '', # number document or duty
                 #line.mnr_number,
                 #line.uom, 
@@ -352,8 +360,8 @@ class SsccInvoice  (orm.Model):
                     header = False                
 
                     # Fields:
-                    number_invoice = line[0:6] # 6
-                    date_invoice = line[6:16] # 10
+                    number_invoice = line[0:6].strip() # 6
+                    date_invoice = line[6:16].strip() # 10
                     partner_code = line[284:293].strip() # 9 (end file)
                     order_number = line[16:22].strip() # 6
                     order_date = line[22:32].strip() or False# 10
