@@ -58,6 +58,8 @@
                <tree string="SSCC Invoice" colors="blue:state=='draft';green:state=='assigned';grey:state=='closed'">
                      <field name="name" />
                      <field name="date"/>
+                     <field name="order_date"/>
+                     <field name="order_number"/>
                      <field name="year"/>
                      <field name="journal"/>
                      <field name="partner_id"/>
@@ -88,6 +90,8 @@
                            <field name="date"/>
                            <field name="year"/>
                            <field name="journal"/>
+                           <field name="order_date"/>
+                           <field name="order_number"/>
                            <field name="partner_id"/>
                            <field name="partner_code"/>
                            <notebook colspan="4">
@@ -114,6 +118,8 @@
                     <field name="name" />
                     <field name="partner_code"/>
                     <field name="partner_id" filter_domain="[('partner_id','=',self)]"/>
+                    <field name="order_date"/>
+                    <field name="order_number"/>
                     
                     <filter name="state_draft" string="Draft state" domain="[('state','=','draft')]"/>
                     <filter name="state_assigned" string="Draft assigned" domain="[('state','=','assigned')]"/>
@@ -207,8 +213,6 @@
             <field name="model">sscc.invoice.line</field>
             <field name="arch" type="xml">
                 <tree string="SSCC Invoice Line" colors="red:sscc_id==False">        
-                   <field name="order_date"/>
-                   <field name="order_number"/>
                    <field name="name" />
                    <field name="code"/>
                    <field name="uom"/>            
@@ -240,8 +244,6 @@
                            <field name="currency"/>
                            <field name="invoice_id"/>
                            <field name="sscc_id"/>
-                           <field name="order_date"/>
-                           <field name="order_number"/>
                            <field name="duty_code"/>
                            <field name="trade_number"/>
                            <field name="quantity"/>              

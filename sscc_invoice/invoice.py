@@ -70,6 +70,7 @@ class SsccCode(orm.Model):
         # Create folder if not present:
         base = config_proxy.value
         os.system('mkdir -p %s' % os.path.join(base, 'history'))
+        os.system('mkdir -p %s' % os.path.join(base, 'csv'))
         os.system('mkdir -p %s' % os.path.join(base, 'xls'))
         os.system('mkdir -p %s' % os.path.join(base, 'codebar'))
         return base
@@ -258,10 +259,10 @@ class SsccInvoice  (orm.Model):
                 return ''
                 
         # Init setup:
-        extension = 'xls'
+        extension = 'csv'
         code_pool = self.pool.get('sscc.code')
         path = code_pool.get_config_base_label_path(cr, uid, context=context)
-        path = os.path.join(path, 'xls')
+        path = os.path.join(path, 'csv')
         
             
         invoice_proxy = self.browse(cr, uid, ids, context=context)[0]
@@ -277,11 +278,11 @@ class SsccInvoice  (orm.Model):
         for line in invoice_proxy.line_ids:
             if first:
                 f_out.write(mask_h % (
-                    line.order_number, # Order number (mand.)
+                    invoice_proxy.order_number, # Order number (mand.)
                     invoice_proxy.name, # DDT number (mand.)
                     format_date(invoice_proxy.date), # DDT date
-                    format_date(order.order_date), # Delivery order date 
-                    )
+                    format_date(invoice_proxy.order_date), # Delivery order date 
+                    ))
                 first = False
                 continue
                 
@@ -354,6 +355,8 @@ class SsccInvoice  (orm.Model):
                     number_invoice = line[0:6] # 6
                     date_invoice = line[6:16] # 10
                     partner_code = line[284:293].strip() # 9 (end file)
+                    order_number = line[16:22].strip() # 6
+                    order_date = line[22:32].strip() or False# 10
                     
                     # Calculated fields:
                     partner_id = False
@@ -371,6 +374,8 @@ class SsccInvoice  (orm.Model):
                         'name': number_invoice,
                         'date': date_invoice,
                         'year': date_invoice[:4],                    
+                        'order_date': order_date,
+                        'order_number': order_number,
                         'partner_id': partner_id,
                         'partner_code': partner_code,
                         #'journal':
@@ -380,8 +385,6 @@ class SsccInvoice  (orm.Model):
                 # Row data:
                 # -------------------------------------------------------------
                 # Fields:
-                order_number = line[16:22].strip() # 6
-                order_date = line[22:32].strip() or False# 10
                 code = line[32:48].strip() # 16
                 description = line[48:120].strip() # 72
                 uom = line[120:122].strip() # 2
@@ -415,8 +418,6 @@ class SsccInvoice  (orm.Model):
                     'currency': currency,
                     'price': price, 
                     'quantity': quantity,
-                    'order_date': order_date,
-                    'order_number': order_number,
                     'duty_code': duty_code,
                     'q_x_pack': q_x_pack,
                     'quantity': quantity,
@@ -441,6 +442,8 @@ class SsccInvoice  (orm.Model):
     _columns = {
         'name': fields.char('Number', size=15, required=True),
         'date': fields.date('Date'),
+        'order_date': fields.date('Order date'),
+        'order_number': fields.char('Order number', size=15), 
         'year': fields.char('Year', size=4),
         'journal': fields.char('Journal', size=64), 
         'partner_code': fields.char('Partner code', size=9),
@@ -475,8 +478,6 @@ class SsccInvoiceLine  (orm.Model):
         'currency': fields.char('currency', size=12), 
         'invoice_id': fields.many2one('sscc.invoice', 'Invoice'), 
         'sscc_id': fields.many2one('sscc.code', 'SSCC code'),
-        'order_date': fields.date('Order date'),
-        'order_number': fields.char('Order number', size=15), 
         'duty_code': fields.char('Duty code', size=8),
         #'sscc': fields.char('SSCC', size=18),
         'trade_number': fields.char('Trade number', size=10),
