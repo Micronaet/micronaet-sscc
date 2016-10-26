@@ -404,7 +404,7 @@ class SsccInvoice  (orm.Model):
                 quantity = line[170:182].strip() # 12
                 q_x_pack = line[182:191].strip() # 9
                 parcel = line[191:196].strip() # 5
-                net_weight = line[196:209].strip() # 13
+                net_weight = quantity # line[196:209].strip() # 13
                 weight = line[209:223].strip() # 14
                 lot = line[223:228].strip() # 5
                 deadline = line[228:233].strip() # 5
