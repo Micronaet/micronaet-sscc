@@ -1,0 +1,412 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+# 	* sscc_invoice
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-10-26 07:20+0000\n"
+"PO-Revision-Date: 2016-10-26 09:28+0100\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: it\n"
+"X-Generator: Poedit 1.6.10\n"
+
+#. module: sscc_invoice
+#: field:sscc.code,codebar_image:0
+msgid "unknown"
+msgstr "sconosciuto"
+
+#. module: sscc_invoice
+#: model:ir.actions.act_window,name:sscc_invoice.action_sscc_invoice_all
+#: model:ir.ui.menu,name:sscc_invoice.menu_sscc_code_management_invoice_all
+msgid "SSCC invoice (all)"
+msgstr "SSCC fatture (tutte)"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,country_from:0
+msgid "Country from"
+msgstr "Paese da"
+
+#. module: sscc_invoice
+#: view:account.invoice.import.sscc.csv:0
+msgid "Manage SSCC invoice procedure:"
+msgstr "Gestione fatture SSCC:"
+
+#. module: sscc_invoice
+#: view:sscc.invoice:0
+msgid "Manage SSCC assign"
+msgstr "Gestione assegnate SSCC"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,lot:0
+msgid "Lot"
+msgstr "Lotto"
+
+#. module: sscc_invoice
+#: view:sscc.invoice:0
+msgid "Line IDs"
+msgstr "ID linee"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,sanitary_date:0
+msgid "Sanitary date"
+msgstr "Data sanitaria"
+
+#. module: sscc_invoice
+#: view:account.invoice.import.sscc.csv:0
+msgid "Import SSCC invoice Wizard"
+msgstr "Imposta fatture SSCC"
+
+#. module: sscc_invoice
+#: view:sscc.code:0
+msgid "Invoice line"
+msgstr "Riga fattura"
+
+#. module: sscc_invoice
+#: model:ir.actions.act_window,name:sscc_invoice.action_account_invoice_import_sscc_csv_wizard_view
+#: model:ir.ui.menu,name:sscc_invoice.menu_account_invoice_import_sscc_csv_wizard
+msgid "Import SSCC invoice"
+msgstr "Importa fatture SSCC"
+
+#. module: sscc_invoice
+#: view:sscc.invoice:0
+msgid "Group By..."
+msgstr "Raggruppa per..."
+
+#. module: sscc_invoice
+#: field:sscc.invoice,state:0
+msgid "State"
+msgstr "Stato"
+
+#. module: sscc_invoice
+#: field:sscc.code,create_date:0
+msgid "Create date"
+msgstr "Data creazione"
+
+#. module: sscc_invoice
+#: selection:sscc.invoice,state:0
+msgid "Draft"
+msgstr "Bozza"
+
+#. module: sscc_invoice
+#: view:sscc.invoice:0
+msgid "Draft state"
+msgstr "Stato bozza"
+
+#. module: sscc_invoice
+#: selection:sscc.invoice,state:0
+msgid "Closed"
+msgstr "Chiuso"
+
+#. module: sscc_invoice
+#: view:sscc.invoice.line:0
+msgid "Quantity:"
+msgstr "Quantità:"
+
+#. module: sscc_invoice
+#: model:ir.ui.menu,name:sscc_invoice.menu_sscc_code_management_root
+msgid "SSCC Management"
+msgstr "Gestione SSCCC"
+
+#. module: sscc_invoice
+#: field:sscc.code,total_line:0
+msgid "Total line"
+msgstr "Totale linee"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,uom:0
+msgid "UOM"
+msgstr "UM"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,order_number:0
+msgid "Order number"
+msgstr "Numero ordine"
+
+#. module: sscc_invoice
+#: view:sscc.invoice:0
+msgid "Status"
+msgstr "Stato"
+
+#. module: sscc_invoice
+#: model:ir.actions.report.xml,name:sscc_invoice.aeroo_sscc_invoice_label_report_id
+msgid "SSCC invoice label"
+msgstr "Etichetta fattura SSCC"
+
+#. module: sscc_invoice
+#: model:ir.actions.act_window,name:sscc_invoice.action_sscc_invoice_line
+#: model:ir.model,name:sscc_invoice.model_sscc_invoice_line
+#: model:ir.ui.menu,name:sscc_invoice.menu_sscc_code_management_invoice_line
+#: view:sscc.invoice.line:0
+msgid "SSCC Invoice Line"
+msgstr "Righe fatture SSCC"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,name:0
+msgid "Description"
+msgstr "Descrizione"
+
+#. module: sscc_invoice
+#: view:sscc.invoice.line:0
+msgid "í"
+msgstr "í"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,sanitary:0
+msgid "Sanitary"
+msgstr "Sanità"
+
+#. module: sscc_invoice
+#: field:sscc.invoice,journal:0
+msgid "Journal"
+msgstr "Giornale"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,q_x_pack:0
+msgid "Q_x_pack"
+msgstr "Q. per scat."
+
+#. module: sscc_invoice
+#: view:sscc.invoice.line:0
+msgid "UOM:"
+msgstr "UM:"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,net_weight:0
+msgid "Net_weight"
+msgstr "Peso netto"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,trade_number:0
+msgid "Trade number"
+msgstr "Numero commercial."
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,quantity:0
+msgid "Quantity"
+msgstr "Quantità"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,order_date:0
+msgid "Order date"
+msgstr "Data ordine"
+
+#. module: sscc_invoice
+#: view:sscc.invoice:0 field:sscc.invoice,date:0
+msgid "Date"
+msgstr "Data"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,parcel:0
+msgid "Parcel"
+msgstr "Colli"
+
+#. module: sscc_invoice
+#: field:sscc.code,line_ids:0 view:sscc.invoice:0
+#: field:sscc.invoice,line_ids:0
+msgid "Line"
+msgstr "Linea"
+
+#. module: sscc_invoice
+#: view:sscc.invoice.line:0
+msgid "Delete"
+msgstr "Elimina"
+
+#. module: sscc_invoice
+#: view:sscc.invoice:0
+msgid "Generate SSCC code"
+msgstr "Genera codice SSCC"
+
+#. module: sscc_invoice
+#: view:sscc.invoice:0
+msgid "Draft closed"
+msgstr "Bozza chiuso"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,sif:0
+msgid "Sif"
+msgstr "SIF"
+
+#. module: sscc_invoice
+#: view:sscc.invoice.line:0
+msgid "Lot:"
+msgstr "Lotto:"
+
+#. module: sscc_invoice
+#: model:ir.model,name:sscc_invoice.model_account_invoice_import_sscc_csv
+msgid "account.invoice.import.sscc.csv"
+msgstr "account.invoice.import.sscc.csv"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,weight:0
+msgid "Weight"
+msgstr "Peso lordo"
+
+#. module: sscc_invoice
+#: field:sscc.code,invoice_id:0 field:sscc.invoice.line,invoice_id:0
+msgid "Invoice"
+msgstr "Fattura"
+
+#. module: sscc_invoice
+#: view:sscc.invoice:0 field:sscc.invoice,year:0
+msgid "Year"
+msgstr "Anno"
+
+#. module: sscc_invoice
+#: help:account.invoice.import.sscc.csv,note:0
+msgid "Procedure for import invoice"
+msgstr "Procedura per importare fattura"
+
+#. module: sscc_invoice
+#: model:ir.actions.act_window,name:sscc_invoice.action_sscc_invoice
+#: model:ir.ui.menu,name:sscc_invoice.menu_sscc_code_management_invoice
+msgid "SSCC invoice"
+msgstr "Fattura SSCC"
+
+#. module: sscc_invoice
+#: field:sscc.code,name:0
+msgid "Counter"
+msgstr "Countatore"
+
+#. module: sscc_invoice
+#: view:sscc.invoice:0 field:sscc.invoice,code_ids:0
+msgid "Sscc Code"
+msgstr "Codice SSCCC"
+
+#. module: sscc_invoice
+#: view:sscc.invoice:0
+msgid "Draft assigned"
+msgstr "Bozza assegnato"
+
+#. module: sscc_invoice
+#: view:sscc.invoice:0
+msgid "Close"
+msgstr "Chiuso"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,price:0
+msgid "Price"
+msgstr "Prezzo"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,extra_code:0
+msgid "Extra code"
+msgstr "Codice extra"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,sscc_id:0
+msgid "SSCC code"
+msgstr "Codice SSCC"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,code:0
+msgid "Code"
+msgstr "Codice"
+
+#. module: sscc_invoice
+#: view:sscc.invoice:0
+msgid ""
+"First code generated auto link all product line, next code better generating "
+"in kanban view for see the element!"
+msgstr ""
+"Il primo codice generato collega tutte le righe fattura, il successivo è "
+"meglio generarlo dalla vista Kanban per vedere l'elemento!"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,country_origin:0
+msgid "Country origin"
+msgstr "Paese di origine"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,currency:0
+msgid "currency"
+msgstr "valuta"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,duty_ok:0
+msgid "Duty ok?"
+msgstr "Ok dogana?"
+
+#. module: sscc_invoice
+#: view:account.invoice.import.sscc.csv:0
+msgid "Import invoice"
+msgstr "Importa fattura"
+
+#. module: sscc_invoice
+#: field:sscc.invoice,name:0
+msgid "Number"
+msgstr "Numero"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,mnr_number:0
+msgid "Mnr Number"
+msgstr "Numero MNR"
+
+#. module: sscc_invoice
+#: view:sscc.invoice:0 selection:sscc.invoice,state:0
+msgid "Assigned"
+msgstr "Assegnato"
+
+#. module: sscc_invoice
+#: view:sscc.invoice.line:0
+msgid "Price:"
+msgstr "Prezzo:"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,duty_code:0
+msgid "Duty code"
+msgstr "Codice dogana"
+
+#. module: sscc_invoice
+#: field:sscc.invoice.line,deadline:0
+msgid "Deadline"
+msgstr "Scadenza"
+
+#. module: sscc_invoice
+#: model:ir.model,name:sscc_invoice.model_sscc_invoice view:sscc.invoice:0
+msgid "SSCC Invoice"
+msgstr "Fatture SSCC"
+
+#. module: sscc_invoice
+#: field:account.invoice.import.sscc.csv,note:0
+msgid "Import SSCC invoiceAnnotation"
+msgstr "Importa fatture SSCC"
+
+#. module: sscc_invoice
+#: view:sscc.invoice:0 field:sscc.invoice,partner_id:0
+msgid "Partner"
+msgstr "Partner"
+
+#. module: sscc_invoice
+#: view:account.invoice.import.sscc.csv:0
+msgid "Cancel"
+msgstr "Annulla"
+
+#. module: sscc_invoice
+#: view:sscc.invoice.line:0
+msgid "Edit..."
+msgstr "Modifica..."
+
+#. module: sscc_invoice
+#: model:ir.actions.act_window,name:sscc_invoice.action_sscc_code
+#: model:ir.model,name:sscc_invoice.model_sscc_code
+#: model:ir.ui.menu,name:sscc_invoice.menu_sscc_code_management_code
+#: view:sscc.code:0
+msgid "SSCC Code"
+msgstr "Codice SSCC"
+
+#. module: sscc_invoice
+#: field:sscc.invoice,partner_code:0
+msgid "Partner code"
+msgstr "Codice partner"
+
+#. module: sscc_invoice
+#: view:sscc.invoice:0
+msgid "Export XLS"
+msgstr "Esporta CSV / XLS"
