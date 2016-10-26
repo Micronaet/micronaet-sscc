@@ -207,15 +207,21 @@
             <field name="model">sscc.invoice.line</field>
             <field name="arch" type="xml">
                 <tree string="SSCC Invoice Line" colors="red:sscc_id==False">        
+                   <field name="order_date"/>
+                   <field name="order_number"/>
                    <field name="name" />
                    <field name="code"/>
                    <field name="uom"/>            
                    <field name="price"/>
-                   <field name="currency"/>
+                   <!--<field name="currency"/>-->
                    <!--<field name="invoice_id"/>-->
                    <field name="sscc_id"/>                         
                    <field name="quantity"/>              
+                   <field name="q_x_pack"/>
+                   <field name="parcel"/>
                    <field name="lot"/>
+                   <field name="net_weight"/>
+                   <field name="weight"/>
                 </tree>
             </field>
         </record>
