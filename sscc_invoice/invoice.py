@@ -503,8 +503,8 @@ class SsccInvoiceLine  (orm.Model):
         'mnr_number': fields.char('Mnr Number', size=10), #TODO
         'sanitary': fields.char('Sanitary', size=10), #TODO
         'sanitary_date': fields.char('Sanitary date', size=10), #TODO
-        'extra_code': fields.char('Extra code', size=10), #TODO
-        'sif': fields.char('Sif', size=10), #TODO 
+        'extra_code': fields.char('Extra code', size=13), #TODO
+        'sif': fields.char('Sif', size=13), #TODO 
         }
         
 class SsccInvoice  (orm.Model):
