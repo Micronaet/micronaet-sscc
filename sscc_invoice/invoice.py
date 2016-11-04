@@ -487,9 +487,9 @@ class SsccInvoiceLine  (orm.Model):
         'invoice_id': fields.many2one('sscc.invoice', 'Invoice', 
             ondelete='cascade'), 
         'sscc_id': fields.many2one('sscc.code', 'SSCC code'),
-        'duty_code': fields.char('Duty code', size=8),
+        'duty_code': fields.char('Duty code', size=20),
         #'sscc': fields.char('SSCC', size=18),
-        'trade_number': fields.char('Trade number', size=10),
+        'trade_number': fields.char('Trade number', size=20),
         'quantity': fields.char('Quantity', size=12),
         'q_x_pack': fields.char('Q_x_pack', size=9),
         'parcel': fields.char('Parcel', size=5),
@@ -497,14 +497,14 @@ class SsccInvoiceLine  (orm.Model):
         'weight': fields.char('Weight', size=14),
         'lot': fields.char('Lot', size=10), #TODO
         'deadline': fields.char('Deadline', size=10),#TODO
-        'country_origin': fields.char('Country origin', size=10),#TODO
-        'country_from': fields.char('Country from', size=10), #TODO
+        'country_origin': fields.char('Country origin', size=20),#TODO
+        'country_from': fields.char('Country from', size=20), #TODO
         'duty_ok': fields.boolean('Duty ok?'),
-        'mnr_number': fields.char('Mnr Number', size=10), #TODO
+        'mnr_number': fields.char('Mnr Number', size=20), #TODO
         'sanitary': fields.char('Sanitary', size=10), #TODO
         'sanitary_date': fields.char('Sanitary date', size=10), #TODO
-        'extra_code': fields.char('Extra code', size=13), #TODO
-        'sif': fields.char('Sif', size=13), #TODO 
+        'extra_code': fields.char('Extra code', size=20), #TODO
+        'sif': fields.char('Sif', size=20), #TODO 
         }
         
 class SsccInvoice  (orm.Model):
